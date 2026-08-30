@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KING & QUEEN — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg:#07070a;--card:rgba(255,255,255,.045);--border:rgba(255,255,255,.09);--blue:#00f0ff;--purple:#ad00ff;--text:#f3f4f6;--muted:#9ca3af}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Poppins,sans-serif;color:var(--text);background:radial-gradient(circle at 20% 20%,rgba(0,240,255,.12),transparent 30%),radial-gradient(circle at 80% 80%,rgba(173,0,255,.14),transparent 30%),var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}
+body:before,body:after{content:"";position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(90px);pointer-events:none}
+body:before{background:rgba(0,240,255,.10);top:-90px;left:-80px}
+body:after{background:rgba(173,0,255,.10);right:-90px;bottom:-90px}
+.wrap{width:100%;max-width:430px;position:relative;z-index:1}
+.logo{text-align:center;font-size:1.55rem;font-weight:800;letter-spacing:.5px;margin-bottom:18px}
+.logo span{background:linear-gradient(90deg,var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{border:1px solid var(--border);background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:24px;padding:28px;box-shadow:0 25px 80px rgba(0,0,0,.45)}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;border:1px solid rgba(0,240,255,.18);background:rgba(0,240,255,.06);color:var(--blue);font-size:.72rem;font-weight:700}
+h1{font-size:1.55rem;margin:15px 0 7px}
+.sub{color:var(--muted);font-size:.84rem;line-height:1.6;margin:0 0 22px}
+label{display:block;color:#d8dbe1;font-size:.78rem;font-weight:600;margin-bottom:8px}
+.phone{display:flex;gap:8px}
+.prefix{width:78px;border:1px solid var(--border);background:rgba(0,0,0,.18);color:var(--text);border-radius:12px;padding:13px;font-family:inherit}
+input{width:100%;border:1px solid var(--border);background:rgba(0,0,0,.18);color:var(--text);border-radius:12px;padding:13px;font-family:inherit;outline:none;transition:.2s}
+input:focus{border-color:rgba(0,240,255,.55);box-shadow:0 0 0 3px rgba(0,240,255,.07)}
+button{width:100%;border:0;border-radius:12px;padding:13px;margin-top:14px;font-family:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 0 24px rgba(0,240,255,.12)}
+button:disabled{opacity:.55;cursor:not-allowed}
+.note{font-size:.7rem;color:var(--muted);line-height:1.55;margin-top:13px}
+.msg{display:none;margin-top:14px;padding:11px 12px;border-radius:11px;font-size:.78rem;line-height:1.5}
+.msg.show{display:block}.msg.ok{border:1px solid rgba(0,255,150,.22);background:rgba(0,255,150,.06)}.msg.err{border:1px solid rgba(255,80,100,.22);background:rgba(255,80,100,.06)}
+#dashboard{display:none}
+.profile{display:grid;gap:9px;margin-top:18px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:11px 12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)}
+.key{color:var(--muted);font-size:.75rem}.val{font-size:.78rem;font-weight:700;text-align:right;word-break:break-all}
+.status{display:inline-flex;align-items:center;gap:6px;color:#62ffb1}
+.logout{background:rgba(255,255,255,.06);box-shadow:none;margin-top:18px}
+.api{margin-top:15px;text-align:center;color:var(--muted);font-size:.67rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><span>KING & QUEEN</span> BOT</div>
+
+  <section class="card" id="loginCard">
+    <span class="badge"><i class="fas fa-shield-halved"></i> WEB ACCESS</span>
+    <h1>Login Panel</h1>
+    <p class="sub">Masukkan nomor WhatsApp untuk melanjutkan ke panel KING & QUEEN.</p>
+
+    <label for="number">Nomor WhatsApp</label>
+    <div class="phone">
+      <select class="prefix" id="country" aria-label="Kode negara">
+        <option value="62">+62</option>
+        <option value="60">+60</option>
+        <option value="65">+65</option>
+      </select>
+      <input id="number" inputmode="numeric" autocomplete="tel" placeholder="81234567890">
+    </div>
+
+    <button id="loginBtn"><i class="fas fa-right-to-bracket"></i> LOGIN</button>
+    <div class="msg" id="loginMsg"></div>
+    <div class="note">Versi awal ini memverifikasi bahwa server bot sedang online. Ini belum merupakan OTP/login identitas user. LID yang ditampilkan adalah LID akun bot yang terhubung ke Baileys.</div>
+  </section>
+
+  <section class="card" id="dashboard">
+    <span class="badge"><i class="fas fa-circle-check"></i> CONNECTED</span>
+    <h1>Dashboard</h1>
+    <p class="sub">Data akun WhatsApp yang sedang terhubung ke server bot.</p>
+
+    <div class="profile">
+      <div class="row"><span class="key">Status</span><span class="val status"><i class="fas fa-circle" style="font-size:.45rem"></i> Online</span></div>
+      <div class="row"><span class="key">Nama</span><span class="val" id="dName">-</span></div>
+      <div class="row"><span class="key">Nomor</span><span class="val" id="dNumber">-</span></div>
+      <div class="row"><span class="key">JID</span><span class="val" id="dJid">-</span></div>
+      <div class="row"><span class="key">LID</span><span class="val" id="dLid">-</span></div>
+    </div>
+
+    <button class="logout" id="logoutBtn"><i class="fas fa-arrow-left"></i> Kembali</button>
+    <div class="msg" id="dashMsg"></div>
+  </section>
+
+  <div class="api">KING & QUEEN • Web Bot Bridge</div>
+</div>
+
+<script>
+/*
+ * GANTI DUA NILAI INI SESUAI SERVER BOT:
+ *
+ * Jika website dan bot satu server:
+ *   API_BASE = "http://localhost:3000"
+ *
+ * Jika website diakses dari domain berbeda:
+ *   API_BASE = "https://api.domainkamu.com"
+ *
+ * API_KEY HARUS sama dengan settings.js.
+ * JANGAN taruh API key rahasia di frontend website publik.
+ * Untuk testing lokal saja boleh.
+ */
+const API_BASE = "http://localhost:3000";
+const API_KEY = "ndra-dev";
+
+const $ = (id) => document.getElementById(id);
+
+function showMessage(el, text, type) {
+  el.textContent = text;
+  el.className = "msg show " + type;
+}
+
+function normalizeNumber(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+async function getBot() {
+  const response = await fetch(API_BASE + "/api/bot", {
+    method: "GET",
+    headers: { "x-api-key": API_KEY }
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.message || "Server API menolak request.");
+  }
+
+  return data.bot;
+}
+
+$("loginBtn").addEventListener("click", async () => {
+  const raw = normalizeNumber($("number").value);
+  const prefix = $("country").value;
+  const number = prefix + raw.replace(/^0+/, "");
+
+  if (raw.length < 8) {
+    showMessage($("loginMsg"), "Nomor WhatsApp tidak valid.", "err");
+    return;
+  }
+
+  $("loginBtn").disabled = true;
+  $("loginBtn").innerHTML = '<i class="fas fa-spinner fa-spin"></i> MENGHUBUNGKAN...';
+
+  try {
+    const bot = await getBot();
+
+    if (!bot.connected) {
+      throw new Error("Bot WhatsApp sedang offline.");
+    }
+
+    /*
+     * Catatan penting:
+     * Nomor yang dimasukkan user BELUM diverifikasi sebagai
+     * pemilik nomor. Untuk login user sungguhan, nanti perlu
+     * OTP/verifikasi dan database user.
+     */
+    $("dName").textContent = bot.name || "-";
+    $("dNumber").textContent = bot.number || number || "-";
+    $("dJid").textContent = bot.jid || "-";
+    $("dLid").textContent = bot.lid || "-";
+
+    $("loginCard").style.display = "none";
+    $("dashboard").style.display = "block";
+  } catch (err) {
+    showMessage($("loginMsg"), err.message || "Gagal terhubung ke server.", "err");
+  } finally {
+    $("loginBtn").disabled = false;
+    $("loginBtn").innerHTML = '<i class="fas fa-right-to-bracket"></i> LOGIN';
+  }
+});
+
+$("logoutBtn").addEventListener("click", () => {
+  $("dashboard").style.display = "none";
+  $("loginCard").style.display = "block";
+  $("loginMsg").className = "msg";
+  $("number").focus();
+});
+</script>
+</body>
+</html>
