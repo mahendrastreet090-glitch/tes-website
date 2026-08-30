@@ -122,8 +122,11 @@ async function getBot() {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok || !data.success) {
-    throw new Error(data.message || "Server API menolak request.");
-  }
+  throw new Error(
+    `API Error ${response.status}: ` +
+    (data.message || "Server API menolak request.")
+  );
+}
 
   return data.bot;
 }
